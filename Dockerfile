@@ -18,12 +18,13 @@ RUN apk add -U --no-cache \
     nodejs npm \
     git fzf ack \
     neovim neovim-doc \
+    openjdk11 \
     alpine-sdk clang llvm
 
 # copy from previous stage
 COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
 
-# install ccls and download vimrc
+# download vimrc
 RUN cd /usr/share/ \
     && git clone https://github.com/siurius/vimrc.git \
     && chmod -R 757 vimrc \
@@ -31,8 +32,12 @@ RUN cd /usr/share/ \
     && echo 'exec ":so " $VIMRC_DIR."/dotvimrc"' >> /usr/share/nvim/sysinit.vim \
     && chmod 757 /usr/share/nvim/sysinit.vim
 
+# configure java
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+    PATH=${PATH}:/usr/lib/jvm/java-11-openjdk/bin
+
 RUN nvim -E -s -u /usr/share/nvim/sysinit.vim +PlugInstall +qall; return 0
-RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-java" +qall; return 0
-RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-snippets" +qall; return 0
+# RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-snippets" +qall; return 0
+# RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-java" +qall; return 0
 
 ENTRYPOINT ["nvim"]
