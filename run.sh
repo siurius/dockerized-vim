@@ -3,6 +3,7 @@
 DVIM_FOLDER=.dockerized-vim
 DVIM_HOME="/home/$USER"
 [ ! -d "${HOME}/${DVIM_FOLDER}/" ] && mkdir -p ${HOME}/${DVIM_FOLDER}
+DVIM_FILE_PATH=/host$(readlink -f $1)
 
 # run docker
 docker run --rm -it --hostname nvim -u $(id -u) -e "HOME=$DVIM_HOME" \
@@ -11,4 +12,4 @@ docker run --rm -it --hostname nvim -u $(id -u) -e "HOME=$DVIM_HOME" \
     -v "${HOME}/${DVIM_FOLDER}:${DVIM_HOME}" \
     -w "/host/$PWD" \
     yiranli/dockerized-vim \
-    "$@"
+    $DVIM_FILE_PATH
