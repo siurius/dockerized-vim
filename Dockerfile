@@ -13,6 +13,9 @@ MAINTAINER yiranli
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
 
+# copy from previous stage
+COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
+
 # prepare for vim and ccls
 RUN apk add -U --no-cache \
     nodejs npm \
@@ -21,8 +24,9 @@ RUN apk add -U --no-cache \
     openjdk11 \
     alpine-sdk clang llvm
 
-# copy from previous stage
-COPY --from=ccls /usr/local/bin/ccls /usr/local/bin/ccls
+# configure java
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+    PATH=${PATH}:/usr/lib/jvm/java-11-openjdk/bin
 
 # download vimrc
 RUN cd /usr/share/ \
@@ -31,10 +35,6 @@ RUN cd /usr/share/ \
     && echo 'let $VIMRC_DIR="/usr/share/vimrc"' >> /usr/share/nvim/sysinit.vim \
     && echo 'exec ":so " $VIMRC_DIR."/dotvimrc"' >> /usr/share/nvim/sysinit.vim \
     && chmod 757 /usr/share/nvim/sysinit.vim
-
-# configure java
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
-    PATH=${PATH}:/usr/lib/jvm/java-11-openjdk/bin
 
 RUN nvim -E -s -u /usr/share/nvim/sysinit.vim +PlugInstall +qall; return 0
 # RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-snippets" +qall; return 0
