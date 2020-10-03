@@ -1,5 +1,8 @@
 # stage for ccls
 FROM alpine:latest AS ccls
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+
 RUN apk add alpine-sdk cmake make clang clang-static clang-dev llvm-dev llvm-static \
 	&& git clone --depth=1 --recursive https://github.com/MaskRay/ccls \
 	&& cd ccls \
