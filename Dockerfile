@@ -22,7 +22,11 @@ RUN apk add -U --no-cache \
     git fzf ack \
     neovim neovim-doc \
     openjdk11 \
+    python3-dev py3-pip \
     alpine-sdk clang llvm
+
+# install python nvim
+RUN pip install pynvim
 
 # configure java
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
