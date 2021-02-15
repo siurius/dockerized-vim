@@ -38,13 +38,13 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
 
 # download vimrc
 RUN cd /usr/share/ \
-    && git clone https://github.com/siurius/vimrc.git \
-    && chmod -R 757 vimrc \
-    && echo 'let $VIMRC_DIR="/usr/share/vimrc"' >> /usr/share/nvim/sysinit.vim \
+    # && git clone https://github.com/siurius/vimrc.git \
+    # && chmod -R 757 vimrc \
+    && echo 'let $VIMRC_DIR=$HOME."/vimrc"' >> /usr/share/nvim/sysinit.vim \
     && echo 'exec ":so " $VIMRC_DIR."/dotvimrc"' >> /usr/share/nvim/sysinit.vim \
     && chmod 757 /usr/share/nvim/sysinit.vim
 
-RUN nvim -E -s -u /usr/share/nvim/sysinit.vim +PlugInstall +qall; return 0
+# RUN nvim -E -s -u /usr/share/nvim/sysinit.vim +PlugInstall +qall; return 0
 # RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-snippets" +qall; return 0
 # RUN nvim -E -s -u /usr/share/nvim/sysinit.vim -c "CocInstall coc-java" +qall; return 0
 
