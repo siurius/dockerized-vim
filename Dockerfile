@@ -26,6 +26,7 @@ RUN apk add -U --no-cache \
     neovim neovim-doc \
     openjdk11 \
     python3-dev py3-pip \
+    the_silver_searcher \
     alpine-sdk clang llvm
 
 # install python nvim
